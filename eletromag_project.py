@@ -24,7 +24,7 @@ def main():
     l1 = d1/n1 # Comprimento do Elemento Finito no dieletrico 1
     l2 = d2/n2 # Comprimento do Elemento Finito no dieletrico 2
 
-    # Criacao da Matriz de Coeficientes Global e do Vetro Global d
+    # Criacao da Matriz de Coeficientes Global e do Vetor Global d
     numero_nos = int(n1 + n2 + 1)
     matriz_global = [[0 for j in range(0, numero_nos)] for i in range(0, numero_nos)]
     vetor_global_d = [0 for i in range(0, numero_nos)]
@@ -63,17 +63,37 @@ def main():
     # v1 = 0
     # v(n1 + n2 + 1) = v0
 
+    # 1) v1 = 0: Eliminar a primeira linha e primeira coluna da matriz global.
+    #            Eliminar a primeira linha do vetor_global_d e fazer atualizacoes no restante das linhas.
+    for i in range(0, len(matriz_global)):
+        matriz_global[i].pop(0)
+    matriz_global.pop(0)
+    vetor_global_d.pop(0)
 
+    # 2) v(n1 + n2 + 1) = v0: Eliminar a ultima linha e a ultima coluna da matriz global.
+    #                         Eliminar a ultima linha do vetor_global_d e fazer atualizacoes no restante das linhas. 
+    for i in range(0, len(vetor_global_d)):
+        vetor_global_d[i] = vetor_global_d[i] - (matriz_global[i][-1]*v0)
+    for i in range(0, len(matriz_global)):
+        matriz_global[i].pop()
+    matriz_global.pop()
+    vetor_global_d.pop()
 
     # Resolvendo o Sistema Matricial Global de Equacoes Lineares
     A = np.array(matriz_global)
     B = np.array(vetor_global_d)
     V = np.linalg.solve(A, B)
 
+    # Printando a solucao com os valores do potencial eletrostatico em cada nó do domínio do problema:
+    print("V1 = 0")
+    for i in range(0, len(V)):
+        print("V" + str(i) + " = " + str(V[i]))
+    print("V" + str(int(n1 + n2 + 1)) + " = " + str(v0))
     
-    map(int, matriz_global)
-    for l in matriz_global:
-        print(l)
+    # Plotando os resultados em um gráfico: V x d.
+    
+    
+    
     return
 
 
