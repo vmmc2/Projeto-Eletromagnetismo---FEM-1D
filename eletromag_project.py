@@ -4,6 +4,16 @@ import matplotlib.pyplot as plt
 PERMISSIVIDADE_DO_VACUO = 8.8541878176 * (10**(-12))
 K = [[1.0, -1.0],[-1.0, 1.0]]
 
+def plot_graphic_V_vs_d(V_values, d_values, d_fronteira, d_total):
+    plt.plot(d_values, V_values, color="black", marker="o", markersize=1)
+    plt.axvspan(0.0, d_fronteira, facecolor="#FFC001")
+    plt.axvspan(d_fronteira, d_total, facecolor="#FBE7C6")
+    plt.xlabel('Distância - d (m)')
+    plt.ylabel('Potencial Eletrostático - V (V)')
+    plt.title('Gráfico V x d')
+    plt.show()
+    return
+
 def main():
     L = float(input("Comprimento e Largura das placas do capacitor: (cm)\n"))
     v0 = float(input("Potencial eletrostatico da placa superior: (V)\n"))
@@ -91,9 +101,26 @@ def main():
     print("V" + str(int(n1 + n2 + 1)) + " = " + str(v0))
     
     # Plotando os resultados em um gráfico: V x d.
+    V_values = [0.0]
+    for i in range(0, len(V)):
+        V_values.append(V[i])
+    V_values.append(1.0)
+
+    d_values = []
+    d_values.append(0.0)
+    current = l1
+    for i in range(0, int(n1)):
+        d_values.append(current)
+        current += l1
+    current -= l1
+    d_fronteira = current
+    current += l2
+    for i in range(0, int(n2)):
+        d_values.append(current)
+        current += l2
     
-    
-    
+    plot_graphic_V_vs_d(V_values, d_values, d_fronteira, d1+d2)
+
     return
 
 
